@@ -1,0 +1,94 @@
+﻿
+@{
+    ViewBag.Title = "Login";
+    Layout = "~/Views/Layout/_MyLayout.cshtml";
+}
+@section navigation {
+    <li class="active">@Html.ActionLink("Home", "Index", "Home")</li>
+    <li>@Html.ActionLink("Menu", "Index", "CustomerOrder")</li>
+    <li>@Html.ActionLink("Contact", "Contact", "Home")</li>
+}
+<style>
+    h2 {
+        background-color: #3081D0;
+        text-align: center;
+        border-radius: 3px;
+        padding: 2px 0px;
+        color: #fff;
+        width: 300px;
+    }
+    form{
+        width:400px;
+    }
+    .infomation {
+        width: 400px;
+        display: flex;
+        margin: 5px 0px;
+        
+    }
+
+        .infomation label {
+            display: block;
+            width: 100px;
+            padding: 4px 0px;
+            color: #3081D0;
+        }
+
+        .infomation input {
+            display: block;
+            flex: 1;
+            border-radius: 5px;
+            outline: none;
+            padding: 4px 4px;
+        }
+    button {
+        background-color: #F05941;
+        padding:5px 15px;
+        border-radius:5px;
+        color:#fff;
+        border:1px solid #fff;
+        margin-top:20px;
+        margin-left:320px;
+    }
+    a{
+        padding:0px 10px;
+    }
+    p {
+        color: #3081D0;
+        text-align:center;
+    }
+    .anounce{
+        display:none;
+        
+    }
+    .open {
+        display: block;
+    }
+</style>
+<h2>Login With Account</h2>
+<form action="/" method="post">
+    <div class="infomation">
+        <label for="nemail">Email</label>
+        <input type="text" name="nemail" />
+    </div>
+    <div class="infomation">
+        <label for="pass">Password</label>
+        <input type="text" name="pass" />
+    </div>
+    <div class="infomation">
+        If you haven't any account, please<a href="~/Home/Register">Register</a>
+    </div>
+
+    <button id="btn">LOGIN</button>
+
+    <p class="anounce">Login Success</p>
+</form>
+<script>
+    var anoune = document.querySelector('.anounce');
+    var btn = document.querySelector('#btn');
+    btn.addEventListener('click', function (e) {
+        anoune.classList.add('open');
+    });
+</script>
+
+

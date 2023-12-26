@@ -1,0 +1,95 @@
+﻿
+@{
+    ViewBag.Title = "Register";
+    Layout = "~/Views/Layout/_MyLayout.cshtml";
+}
+@section navigation {
+    <li class="active">@Html.ActionLink("Home", "Index", "Home")</li>
+    <li>@Html.ActionLink("Menu", "Index", "CustomerOrder")</li>
+    <li>@Html.ActionLink("Contact", "Contact", "Home")</li>
+}
+<style>
+    h2 {
+        background-color: #3081D0;
+        text-align: center;
+        border-radius: 3px;
+        padding: 2px 0px;
+        color: #fff;
+        width: 330px;
+    }
+
+    form {
+        width: 400px;
+    }
+
+    .infomation {
+        width: 400px;
+        display: flex;
+        margin: 5px 0px;
+    }
+
+        .infomation label {
+            display: block;
+            width: 100px;
+            padding: 4px 0px;
+            color: #3081D0;
+        }
+
+        .infomation input {
+            display: block;
+            flex: 1;
+            border-radius: 5px;
+            outline: none;
+            padding: 4px 4px;
+        }
+
+    button {
+        background-color: #F05941;
+        padding: 5px 15px;
+        border-radius: 5px;
+        color: #fff;
+        border: 1px solid #fff;
+        margin-top: 20px;
+        margin-left: 290px;
+    }
+
+    a {
+        padding: 0px 10px;
+    }
+</style>
+<h2>Register Your Account</h2>
+<form action="/" method="post">
+    <div class="infomation">
+        <label for="uname">Name</label>
+        <input type="text" name="uname" />
+    </div>
+
+    <div class="infomation">
+        <label for="nemail">Email</label>
+        <input type="text" name="nemail" />
+    </div>
+    <div class="infomation">
+        <label for="pass">Password</label>
+        <input type="text" name="pass" />
+    </div>
+    <div class="infomation">
+        <label for="address">Address</label>
+        <input type="text" name="address" />
+    </div>
+    <div class="infomation">
+        <label for="phone">Phone</label>
+        <input type="text" name="phone" />
+    </div>
+    <div class="infomation">
+        <label for="birthday">Date of birth</label>
+        <input type="date" name="birthday" />
+    </div>
+    <div class="infomation">
+        If you had an account, please<a href="~/Home/Login">Login</a>
+    </div>
+
+    <button>REGISTER</button>
+
+</form>
+
+
