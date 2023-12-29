@@ -1,10 +1,14 @@
 ﻿@model List<PizzaOrderWebApplication.Models.OrderDetail>
 
-@{
-    ViewBag.Title = "FoodCart";
-    Layout = "~/Views/Layout/_MyLayout.cshtml";
+@{ ViewBag.Title = "FoodCart";
+                Layout = "~/Views/Layout/_MyLayout.cshtml"; }
+@using PizzaOrderWebApplication.Models;
+@section account{
+    @if (Session["AccountUser"] != null)
+    {
+        User user = (User)Session["AccountUser"];
+<p><img src="~/Content/Images/user.png" alt="User" />@user.CustomerName</p>}
 }
-
 @section myjavascripts {
     <script>
         function plus(btnPlus) {
@@ -55,19 +59,18 @@
     </tr>
     @foreach (var o in Model)
     {
-        <tr>
-            <td>@o.Dish.Food.FoodName</td>
-            <td>@o.Size</td>
-            <td>@o.Quantity</td>
-            <td>@o.Dish.Price</td>
-            <td>@((o.Dish.Price * o.Quantity))</td>
-            <td>
-                <button class="btn btn-info" onclick="plus(this)"><span class="glyphicon glyphicon-plus"></span></button>
-                <button class="btn btn-info" onclick="minus(this)"><span class="glyphicon glyphicon-minus"></span></button>
-                <button class="btn btn-danger" onclick="remove(this)"><span class="glyphicon glyphicon-remove"></span> Remove</button>
-            </td>
-        </tr>
-    }
+<tr>
+    <td>@o.Dish.Food.FoodName</td>
+    <td>@o.Size</td>
+    <td>@o.Quantity</td>
+    <td>@o.Dish.Price</td>
+    <td>@((o.Dish.Price * o.Quantity))</td>
+    <td>
+        <button class="btn btn-info" onclick="plus(this)"><span class="glyphicon glyphicon-plus"></span></button>
+        <button class="btn btn-info" onclick="minus(this)"><span class="glyphicon glyphicon-minus"></span></button>
+        <button class="btn btn-danger" onclick="remove(this)"><span class="glyphicon glyphicon-remove"></span> Remove</button>
+    </td>
+</tr>}
 </table>
 
 

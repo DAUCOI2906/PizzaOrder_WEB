@@ -1,13 +1,35 @@
 ﻿
 @{ ViewBag.Title = "Contact";
-                Layout = "~/Views/Layout/_MyLayout.cshtml"; }
+    Layout = "~/Views/Layout/_MyLayout.cshtml"; }
 
 @section navigation {
     <li>@Html.ActionLink("Home", "Index", "Home")</li>
-    <li>@Html.ActionLink("Menu", "Index", "CustomerOrder")</li>
+    <li>
+        @if (Session["AccountUser"] != null)
+        {
+@Html.ActionLink("Menu", "Index", "CustomerOrder")}
+else
+{
+@Html.ActionLink("Menu", "Login", "Home")}
+    </li>
     <li class="active">@Html.ActionLink("Contact", "Contact", "Home")</li>
+    <li>
+        @if (Session["AccountUser"] != null)
+        {
+            @Html.ActionLink("Order", "OrderList.aspx", "CustomerOrders")}
+        else
+        {
+            @Html.ActionLink("Order", "Login", "Home")
+        }
+    </li>
 }
-
+@using PizzaOrderWebApplication.Models;
+@section account{
+    @if (Session["AccountUser"] != null)
+    {
+        User user = (User)Session["AccountUser"];
+<p><img src="~/Content/Images/user.png" alt="User" />@user.CustomerName</p>}
+}
 <div style="width: 100%; height: 300px;">
     <iframe width="950" height="300" frameborder="0" style="border:0" allowfullscreen
             src="https://www.google.com/maps?q=45+nguy%E1%BB%85n+tr%C3%A3i,+thanh+xu%C3%A2n,+h%C3%A0+n%E1%BB%99i&amp;t=m&amp;z=14&amp;output=embed">

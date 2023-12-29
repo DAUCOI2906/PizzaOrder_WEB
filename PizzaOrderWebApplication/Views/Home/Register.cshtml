@@ -5,8 +5,32 @@
 }
 @section navigation {
     <li class="active">@Html.ActionLink("Home", "Index", "Home")</li>
-    <li>@Html.ActionLink("Menu", "Index", "CustomerOrder")</li>
+    <li>
+        @if (Session["AccountUser"] != null)
+        {
+            @Html.ActionLink("Menu", "Index", "CustomerOrder")}
+        else
+        {
+            @Html.ActionLink("Menu", "Login", "Home")
+        }
+    </li>
     <li>@Html.ActionLink("Contact", "Contact", "Home")</li>
+    <li>
+        @if (Session["AccountUser"] != null)
+        {
+            @Html.ActionLink("Order", "OrderList.aspx", "CustomerOrders")}
+        else
+        {
+            @Html.ActionLink("Order", "Login", "Home")
+        }
+    </li>
+}
+@using PizzaOrderWebApplication.Models;
+@section account{
+    @if (Session["AccountUser"] != null)
+    {
+        User user = (User)Session["AccountUser"];
+        <p><img src="~/Content/Images/user.png" alt="User" />@user.CustomerName</p>}
 }
 <style>
     h2 {
@@ -53,43 +77,53 @@
         margin-left: 290px;
     }
 
+    p {
+        color: #3081D0;
+        text-align: center;
+    }
+
     a {
         padding: 0px 10px;
     }
 </style>
 <h2>Register Your Account</h2>
-<form action="/" method="post">
+<form action="~/Home/RegisterAccess" method="post">
     <div class="infomation">
         <label for="uname">Name</label>
-        <input type="text" name="uname" />
+        <input type="text" name="uname" required />
     </div>
 
     <div class="infomation">
         <label for="nemail">Email</label>
-        <input type="text" name="nemail" />
+        <input type="text" name="nemail" required />
     </div>
     <div class="infomation">
         <label for="pass">Password</label>
-        <input type="text" name="pass" />
+        <input type="text" name="pass" required />
     </div>
     <div class="infomation">
         <label for="address">Address</label>
-        <input type="text" name="address" />
+        <input type="text" name="address" required />
     </div>
     <div class="infomation">
         <label for="phone">Phone</label>
-        <input type="text" name="phone" />
+        <input type="text" name="phone" required />
     </div>
     <div class="infomation">
         <label for="birthday">Date of birth</label>
-        <input type="date" name="birthday" />
+        <input type="date" name="birthday" required />
     </div>
     <div class="infomation">
         If you had an account, please<a href="~/Home/Login">Login</a>
     </div>
 
     <button>REGISTER</button>
-
+    @{
+        if (ViewBag.thongbao2 != null)
+        {
+            <p class="anounce">@ViewBag.thongbao2</p>
+        }
+    }
 </form>
 
 

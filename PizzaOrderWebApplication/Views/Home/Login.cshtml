@@ -5,8 +5,32 @@
 }
 @section navigation {
     <li class="active">@Html.ActionLink("Home", "Index", "Home")</li>
-    <li>@Html.ActionLink("Menu", "Index", "CustomerOrder")</li>
+    <li>
+        @if (Session["AccountUser"] != null)
+        {
+            @Html.ActionLink("Menu", "Index", "CustomerOrder")}
+        else
+        {
+            @Html.ActionLink("Menu", "Login", "Home")
+        }
+    </li>
     <li>@Html.ActionLink("Contact", "Contact", "Home")</li>
+    <li>
+        @if (Session["AccountUser"] != null)
+        {
+            @Html.ActionLink("Order", "OrderList.aspx", "CustomerOrders")}
+        else
+        {
+            @Html.ActionLink("Order", "Login", "Home")
+        }
+    </li>
+}
+@using PizzaOrderWebApplication.Models;
+@section account{
+    @if (Session["AccountUser"] != null)
+    {
+        User user = (User)Session["AccountUser"];
+        <p><img src="~/Content/Images/user.png" alt="User" />@user.CustomerName</p>}
 }
 <style>
     h2 {
@@ -17,14 +41,15 @@
         color: #fff;
         width: 300px;
     }
-    form{
-        width:400px;
+
+    form {
+        width: 400px;
     }
+
     .infomation {
         width: 400px;
         display: flex;
         margin: 5px 0px;
-        
     }
 
         .infomation label {
@@ -41,54 +66,55 @@
             outline: none;
             padding: 4px 4px;
         }
+
     button {
         background-color: #F05941;
-        padding:5px 15px;
-        border-radius:5px;
-        color:#fff;
-        border:1px solid #fff;
-        margin-top:20px;
-        margin-left:320px;
+        padding: 5px 15px;
+        border-radius: 5px;
+        color: #fff;
+        border: 1px solid #fff;
+        margin-top: 20px;
+        margin-left: 320px;
     }
-    a{
-        padding:0px 10px;
+
+    a {
+        padding: 0px 10px;
     }
+
     p {
         color: #3081D0;
-        text-align:center;
+        text-align: center;
     }
-    .anounce{
-        display:none;
-        
-    }
+
     .open {
         display: block;
     }
 </style>
 <h2>Login With Account</h2>
-<form action="/" method="post">
+<form action="~/Home/LoginAccess" method="post">
     <div class="infomation">
-        <label for="nemail">Email</label>
-        <input type="text" name="nemail" />
+        <label for="nname">User Name</label>
+        <input type="text" name="nname" required />
     </div>
     <div class="infomation">
         <label for="pass">Password</label>
-        <input type="text" name="pass" />
+        <input type="text" name="pass" required />
     </div>
     <div class="infomation">
         If you haven't any account, please<a href="~/Home/Register">Register</a>
     </div>
 
-    <button id="btn">LOGIN</button>
+    <button type="submit" id="btn">LOGIN</button>
 
-    <p class="anounce">Login Success</p>
+    @{
+        if (ViewBag.thongbao2 != null)
+        {
+            <p class="anounce">@ViewBag.thongbao2</p>
+
+        }
+    }
+
 </form>
-<script>
-    var anoune = document.querySelector('.anounce');
-    var btn = document.querySelector('#btn');
-    btn.addEventListener('click', function (e) {
-        anoune.classList.add('open');
-    });
-</script>
+
 
 

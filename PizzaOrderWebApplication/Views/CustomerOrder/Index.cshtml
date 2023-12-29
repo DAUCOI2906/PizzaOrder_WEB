@@ -3,11 +3,15 @@
 @using PagedList.Mvc;
 @model PagedList.PagedList<PizzaOrderWebApplication.Models.Food>
 
-@{
-    ViewBag.Title = "Index";
-    Layout = "~/Views/Layout/_MyLayout.cshtml";
+@{ ViewBag.Title = "Index";
+                Layout = "~/Views/Layout/_MyLayout.cshtml"; }
+@using PizzaOrderWebApplication.Models;
+@section account{
+    @if (Session["AccountUser"] != null)
+    {
+        User user = (User)Session["AccountUser"];
+<p><img src="~/Content/Images/user.png" alt="User" />@user.CustomerName</p>}
 }
-
 @section myjavascripts {
     <script>
         function AddFoodToCart(foodId, size) {
@@ -45,30 +49,26 @@
         <span class="label label-success" style="float:right;" id="MyCartNotification"></span>
     </p>
     <ul class="nav nav-tabs">
-        @{
-            List<Category> Categories = (List<Category>)ViewData["Categories"];
+        @{ List<Category> Categories = (List<Category>)ViewData["Categories"];
 
-            Category Category = (Category)ViewData["Category"];
+                        Category Category = (Category)ViewData["Category"];
 
 
-            foreach (var c in Categories)
-            {
-                if (c == Category)
-                {
-                    <li class="active">
-                        @Html.ActionLink(c.CategoryName, "Index", "CustomerOrder",
-                       new { CategoryID = c.CategoryID }, null)
-                    </li>
-                }
-                else
-                {
-                    <li>
-                        @Html.ActionLink(c.CategoryName, "Index", "CustomerOrder",
-                       new { CategoryID = c.CategoryID }, null)
-                    </li>
-                }
-            }
-        }
+                        foreach (var c in Categories)
+                        {
+                            if (c == Category)
+                            {
+            <li class="active">
+                @Html.ActionLink(c.CategoryName, "Index", "CustomerOrder",
+                    new { CategoryID = c.CategoryID }, null)
+            </li> }
+                            else
+                            {
+            <li>
+                @Html.ActionLink(c.CategoryName, "Index", "CustomerOrder",
+                    new { CategoryID = c.CategoryID }, null)
+            </li> }
+                        } }
     </ul>
 
     <div class="tab-content clearfix">
@@ -80,31 +80,30 @@
 
             @foreach (var f in Model)
             {
-                <div class="col-sm-6 col-xs-12">
-                    <div>
-                        <img src="~/Content/Images/Menu/Pizza/@f.ImageString"
-                             class="img-thumbnail col-sm-2" alt="@f.FoodName"
-                             style="padding-left: 0; padding-right: 0;" />
-                        <div class="col-sm-10">
-                            <p>
-                                <span style="color: red;">#@f.FoodID @f.FoodName</span>
-                                <span class="pull-right">
-                                    <span class="label label-default" style="padding-top: 5px;">$@f.Dishes.ElementAt(2).Price</span><b>/</b>
-                                    <span class="label label-default" style="padding-top: 5px;">$@f.Dishes.ElementAt(1).Price</span><b>/</b>
-                                    <span class="label label-default" style="padding-top: 5px;">$@f.Dishes.ElementAt(0).Price</span>
-                                </span>
-                            </p>
-                            <p><small>@f.Ingredients</small></p>
-                            <p class="pull-right well-sm" style="padding-right: 0;">
-                                Order:
-                                <button class="btn btn-xs btn-danger" onclick="AddFoodToCart('@f.FoodID', '@f.Dishes.ElementAt(2).Size')">Size S</button><b>/</b>
-                                <button class="btn btn-xs btn-danger" onclick="AddFoodToCart('@f.FoodID', '@f.Dishes.ElementAt(1).Size')">Size M</button><b>/</b>
-                                <button class="btn btn-xs btn-danger" onclick="AddFoodToCart('@f.FoodID', '@f.Dishes.ElementAt(0).Size')">Size L</button>
-                            </p>
-                        </div>
-                    </div>
-                </div>
-            }
+<div class="col-sm-6 col-xs-12">
+    <div>
+        <img src="~/Content/Images/Menu/Pizza/@f.ImageString"
+             class="img-thumbnail col-sm-2" alt="@f.FoodName"
+             style="padding-left: 0; padding-right: 0;" />
+        <div class="col-sm-10">
+            <p>
+                <span style="color: red;">#@f.FoodID @f.FoodName</span>
+                <span class="pull-right">
+                    <span class="label label-default" style="padding-top: 5px;">$@f.Dishes.ElementAt(2).Price</span><b>/</b>
+                    <span class="label label-default" style="padding-top: 5px;">$@f.Dishes.ElementAt(1).Price</span><b>/</b>
+                    <span class="label label-default" style="padding-top: 5px;">$@f.Dishes.ElementAt(0).Price</span>
+                </span>
+            </p>
+            <p><small>@f.Ingredients</small></p>
+            <p class="pull-right well-sm" style="padding-right: 0;">
+                Order:
+                <button class="btn btn-xs btn-danger" onclick="AddFoodToCart('@f.FoodID', '@f.Dishes.ElementAt(2).Size')">Size S</button><b>/</b>
+                <button class="btn btn-xs btn-danger" onclick="AddFoodToCart('@f.FoodID', '@f.Dishes.ElementAt(1).Size')">Size M</button><b>/</b>
+                <button class="btn btn-xs btn-danger" onclick="AddFoodToCart('@f.FoodID', '@f.Dishes.ElementAt(0).Size')">Size L</button>
+            </p>
+        </div>
+    </div>
+</div>            }
         </div>
     </div>
 

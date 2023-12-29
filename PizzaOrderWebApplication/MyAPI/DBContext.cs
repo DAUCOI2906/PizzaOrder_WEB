@@ -11,6 +11,7 @@ namespace PizzaOrderWebApplication.MyAPI
 {
     public class DBContext
     {
+        
         public static SqlConnection GetConnection()
         {
             string strConnection = ConfigurationManager.ConnectionStrings["PizzaDB"].ToString();
@@ -31,6 +32,49 @@ namespace PizzaOrderWebApplication.MyAPI
                               ,[Phone]
                               ,[Note]
                           FROM [dbo].[Orders]";
+
+            SqlCommand command = new SqlCommand(query, connection);
+            DataTable dt = new DataTable();
+            SqlDataAdapter adapter = new SqlDataAdapter(command);
+            adapter.Fill(dt);
+
+            foreach (DataRow dr in dt.Rows)
+            {
+                Order o = new Order
+                {
+                    OrderID = Convert.ToInt32(dr["OrderID"]),
+                    OrderDate = Convert.ToDateTime(dr["OrderDate"]),
+                    ShippedDate = Convert.ToDateTime(dr["ShippedDate"]),
+                    CustomerName = dr["CustomerName"].ToString(),
+                    CustomerAddress = dr["CustomerAddress"].ToString(),
+                    Phone = dr["Phone"].ToString(),
+                    Note = dr["Note"].ToString()
+                };
+                //int OrderId = Convert.ToInt32(dr["OrderID"]);
+                //DateTime OrderDate = Convert.ToDateTime(dr["OrderDate"]);
+                //DateTime ShippedDate = Convert.ToDateTime(dr["ShippedDate"]);
+                //string CustomerName = dr["CustomerName"].ToString();
+                //string CustomerAddress = dr["CustomerAddress"].ToString();
+                //string Phone = dr["Phone"].ToString();
+                //string Note = dr["Note"].ToString();
+                //Order o = new Order(OrderId, OrderDate, ShippedDate, CustomerName, CustomerAddress, Phone, Note);
+                list.Add(o);
+            }
+            return list;
+        }
+        static public List<Order> GetAllOrdersbyUser(String username)
+        {
+            List<Order> list = new List<Order>();
+            SqlConnection connection = GetConnection();
+
+            string query = @"SELECT [OrderID]
+                              ,[OrderDate]
+                              ,[ShippedDate]
+                              ,[CustomerName]
+                              ,[CustomerAddress]
+                              ,[Phone]
+                              ,[Note]
+                          FROM [dbo].[Orders] WHERE CustomerName='"+username+"'";
 
             SqlCommand command = new SqlCommand(query, connection);
             DataTable dt = new DataTable();
@@ -162,6 +206,14 @@ namespace PizzaOrderWebApplication.MyAPI
             if (dt.Rows.Count > 0)
                 return true;
             return false;
+        }
+        static public int add(String querry)
+        {
+            int k = 0;
+            SqlConnection connection = GetConnection();
+            SqlCommand command = new SqlCommand(querry, connection);
+            k = (int)command.ExecuteNonQuery();
+            return k;
         }
     }
 }

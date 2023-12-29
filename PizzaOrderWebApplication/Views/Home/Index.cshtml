@@ -1,13 +1,35 @@
 ﻿
 @{ ViewBag.Title = "Index";
-                Layout = "~/Views/Layout/_MyLayout.cshtml"; }
+    Layout = "~/Views/Layout/_MyLayout.cshtml"; }
 
 @section navigation {
     <li class="active">@Html.ActionLink("Home", "Index", "Home")</li>
-    <li>@Html.ActionLink("Menu", "Index", "CustomerOrder")</li>
+    <li>
+        @if (Session["AccountUser"] != null)
+        {
+@Html.ActionLink("Menu", "Index", "CustomerOrder")}
+else
+{
+@Html.ActionLink("Menu", "Login", "Home")}
+    </li>
     <li>@Html.ActionLink("Contact", "Contact", "Home")</li>
+    <li>
+        @if (Session["AccountUser"] != null)
+        {
+            @Html.ActionLink("Order", "OrderList.aspx", "CustomerOrders")}
+        else
+        {
+            @Html.ActionLink("Order", "Login", "Home")
+        }
+    </li>
 }
-
+@using PizzaOrderWebApplication.Models;
+@section account{
+    @if (Session["AccountUser"] != null)
+    {
+        User user = (User)Session["AccountUser"];
+<p><img src="~/Content/Images/user.png" alt="User" />@user.CustomerName</p>}
+}
 
 <div id="myCarousel" class="carousel slide" data-ride="carousel">
     <!-- Indicators -->

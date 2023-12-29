@@ -3,11 +3,8 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
-using System.Web;
-using System.Web.UI;
 using System.Web.UI.WebControls;
 using PizzaOrderWebApplication.MyAPI;
-using System.Diagnostics;
 using System.Data.SqlClient;
 
 namespace PizzaOrderWebApplication.CustomerOrder
@@ -24,6 +21,11 @@ namespace PizzaOrderWebApplication.CustomerOrder
             {
                 loadDataToGridView();
                 tbxShipdate.Text = DateTime.Now.AddHours(2).ToString("yyyy-MM-dd HH:mm").Replace(' ', 'T');
+                //do du lieu nguoi dung vao textbox tu session
+               User user = (User)Session["AccountUser"];
+                tbxName.Text = user.CustomerName;
+                tbxAddress.Text = user.Address;
+                tbxPhone.Text = user.Phone;
             }
         }
 
@@ -72,7 +74,7 @@ namespace PizzaOrderWebApplication.CustomerOrder
         protected void btnOrder_Click(object sender, EventArgs e)
         {
             List<OrderDetail> mycart = (List<OrderDetail>)Session[CART_STRING];
-
+            
             if (mycart != null)
             {
                 //add order and order detail to database
@@ -186,5 +188,7 @@ namespace PizzaOrderWebApplication.CustomerOrder
             }
 
         }
+
+        
     }
 }

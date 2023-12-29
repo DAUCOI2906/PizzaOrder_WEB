@@ -31,6 +31,7 @@
         }
         #myNavbar p{
             color:#fff;
+            text-transform:uppercase;
             font-weight:bold;
             position:absolute;
             top:0px;
@@ -70,7 +71,8 @@
                 <ul class="nav navbar-nav">
                     <li>@Html.ActionLink("Login", "Login", "Home")</li>
                 </ul>
-                <p><img src="~/Content/Images/user.png" alt="User" /> Nguyen Manh Dung</p>
+                <!--<p><img src="~/Content/Images/user.png" alt="User" /> Nguyen Manh Dung</p>-->
+                @RenderSection("account", true)
             </div>
         </div>
     </nav>
