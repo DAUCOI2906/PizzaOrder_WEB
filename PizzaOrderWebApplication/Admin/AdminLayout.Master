@@ -56,23 +56,6 @@
                 gap: 10px;
             }
     </style>
-    <script type="text/javascript">
-    function deleteFood(foodId) {
-        // Gọi AJAX để xóa Food
-       PageMethods.DeleteFood(foodId);
-        
-    }
-
-    function onDeleteSuccess(result) {
-        // Xử lý sau khi xóa thành công (nếu cần)
-        alert('Food deleted successfully!');
-    }
-
-    function onDeleteError(error) {
-        // Xử lý khi có lỗi xóa (nếu cần)
-        alert('Error deleting food: ' + error.get_message());
-    }
-    </script>
 </head>
 <body>
     <div class="nam-header container-fluid clearfix">
@@ -112,7 +95,7 @@
         </div>
 
         <div class="text-center label-danger" style="clear: left; margin: 40px 0 0; padding: 20px; color: white;">
-            &copy; <%: DateTime.Now.Year %> by MD RESTAURANT
+            &copy; <%: DateTime.Now.Year %> by Dũng Truyền Nga Trâm
         </div>
     </div>
 </body>

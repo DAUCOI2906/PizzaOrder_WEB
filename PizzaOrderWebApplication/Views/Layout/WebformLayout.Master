@@ -75,7 +75,7 @@
         </div>
 
         <div class="text-center label-danger" style="clear: left; margin: 40px 0 0; padding: 20px; color: white;">
-            &copy; <%: DateTime.Now.Year %> by MD RESTAURANT
+            &copy; <%: DateTime.Now.Year %> by Dũng Truyền Nga Trâm
         </div>
     </div>
 </body>

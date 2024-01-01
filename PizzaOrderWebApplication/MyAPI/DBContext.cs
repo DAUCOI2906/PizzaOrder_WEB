@@ -102,7 +102,6 @@ namespace PizzaOrderWebApplication.MyAPI
         {
             List<OrderDetail> list = new List<OrderDetail>();
             SqlConnection connection = GetConnection();
-
             string query = @"SELECT [OrderID]
                                   ,od.[FoodID]
                                   ,od.[Size]
@@ -201,10 +200,19 @@ namespace PizzaOrderWebApplication.MyAPI
         }
         static public int InsertToDB(String querry)
         {
+
             int k = 0;
             SqlConnection connection = GetConnection();
             SqlCommand command = new SqlCommand(querry, connection);
-            k = (int)command.ExecuteNonQuery();
+            try
+            {
+
+                k = (int)command.ExecuteNonQuery();
+            }
+            catch (Exception ex)
+            {
+                k = 0;
+            }
             return k;
         }
         static public int InsertFood(string foodId, string name, string ingredient, string fileAddress, int category)
@@ -227,7 +235,15 @@ namespace PizzaOrderWebApplication.MyAPI
                     command.Parameters.AddWithValue("@ImageString", fileAddress);
 
                     // Thực hiện lệnh SQL
-                    k = (int)command.ExecuteNonQuery();
+                    try
+                    {
+
+                        k = (int)command.ExecuteNonQuery();
+                    }
+                    catch (Exception ex)
+                    {
+                        k = 0;
+                    }
                 }
             }
             return k;
@@ -250,7 +266,15 @@ namespace PizzaOrderWebApplication.MyAPI
                     command.Parameters.AddWithValue("@Price", price);
 
                     // Thực hiện lệnh SQL
-                    k = (int)command.ExecuteNonQuery();
+                    try
+                    {
+
+                        k = (int)command.ExecuteNonQuery();
+                    }
+                    catch (Exception ex)
+                    {
+                        k = 0;
+                    }
                 }
             }
             return k;
@@ -289,24 +313,27 @@ namespace PizzaOrderWebApplication.MyAPI
             return list;
         }
 
-        public int DeleteFood(string foodID)
+        static public int DeleteFood(string foodID)
         {
             int k = 0;
             using (SqlConnection connection = GetConnection())
             {
                 connection.Open();
-
-                // Bước 1: Xóa chi tiết đặt hàng liên quan đến món ăn cụ thể
-                if (DeleteOrderDetails(connection, foodID) != 0
-                    && DeleteDishRecords(connection, foodID) != 0
-                    && DeleteFoodRecord(connection, foodID) != 0
-                    )
+                try
+                {
+                    DeleteOrderDetails(connection, foodID);
+                    DeleteDishRecords(connection, foodID);
+                    DeleteFoodRecord(connection, foodID);
                     k = 1;
+                }
+                catch (Exception ex)
+                {
+                }
             }
             return k;
         }
 
-        private int DeleteOrderDetails(SqlConnection connection, string foodID)
+        static public int DeleteOrderDetails(SqlConnection connection, string foodID)
         {
             int k = 0;
             using (SqlCommand command = new SqlCommand("DELETE FROM OrderDetail WHERE FoodID = @FoodID", connection))
@@ -317,7 +344,7 @@ namespace PizzaOrderWebApplication.MyAPI
             return k;
         }
 
-        private int DeleteDishRecords(SqlConnection connection, string foodID)
+        static public int DeleteDishRecords(SqlConnection connection, string foodID)
         {
             int k = 0;
             using (SqlCommand command = new SqlCommand("DELETE FROM Dish WHERE FoodID = @FoodID", connection))
@@ -328,7 +355,7 @@ namespace PizzaOrderWebApplication.MyAPI
             return k;
         }
 
-        private int DeleteFoodRecord(SqlConnection connection, string foodID)
+        static public int DeleteFoodRecord(SqlConnection connection, string foodID)
         {
             int k = 0;
             using (SqlCommand command = new SqlCommand("DELETE FROM Food WHERE FoodID = @FoodID", connection))
@@ -338,5 +365,151 @@ namespace PizzaOrderWebApplication.MyAPI
             }
             return k;
         }
+
+        public static Food GetPizzaById(string idPizza)
+        {
+            using (SqlConnection connection = GetConnection())
+            {
+                connection.Open();
+
+                string query = @"SELECT [FoodID]
+                                      ,[FoodName]
+                                      ,[Ingredients]
+                                      ,[CategoryID]
+                                      ,[ImageString]
+                                  FROM [dbo].[Food] 
+                                  WHERE FoodID = @FoodID";
+
+                using (SqlCommand command = new SqlCommand(query, connection))
+                {
+                    command.Parameters.AddWithValue("@FoodID", idPizza);
+
+                    using (SqlDataAdapter adapter = new SqlDataAdapter(command))
+                    {
+                        DataTable dt = new DataTable();
+                        adapter.Fill(dt);
+
+                        if (dt.Rows.Count > 0)
+                        {
+                            DataRow dr = dt.Rows[0];
+                            Food pizza = new Food
+                            {
+                                FoodID = dr["FoodID"].ToString(),
+                                CategoryID = Convert.ToInt32(dr["CategoryID"]),
+                                FoodName = dr["FoodName"].ToString(),
+                                Ingredients = dr["Ingredients"].ToString(),
+                                ImageString = dr["ImageString"].ToString(),
+                            };
+                            return pizza;
+                        }
+                        else
+                        {
+                            // Không tìm thấy Pizza với FoodID tương ứng
+                            return null;
+                        }
+                    }
+                }
+            }
+        }
+        public static Dictionary<string, float> GetPizzaPriceById(string idPizza)
+        {
+            Dictionary<string, float> pizzaPrices = new Dictionary<string, float>();
+
+            using (SqlConnection connection = GetConnection())
+            {
+                connection.Open();
+
+                string query = @"SELECT [Size], [Price]
+                          FROM [dbo].[Dish] 
+                          WHERE FoodID = @FoodID";
+
+                using (SqlCommand command = new SqlCommand(query, connection))
+                {
+                    command.Parameters.AddWithValue("@FoodID", idPizza);
+
+                    using (SqlDataAdapter adapter = new SqlDataAdapter(command))
+                    {
+                        DataTable dt = new DataTable();
+                        adapter.Fill(dt);
+
+                        foreach (DataRow dr in dt.Rows)
+                        {
+                            string size = dr["Size"].ToString();
+                            float price = Convert.ToSingle(dr["Price"]);
+
+                            // Thêm cặp key-value vào danh sách
+                            pizzaPrices.Add(size, price);
+                        }
+                    }
+                }
+            }
+
+            return pizzaPrices;
+        }
+        static public int UpdateFood(string foodId, string name, string ingredient, string fileAddress, int category)
+        {
+            int k = 0;
+
+            using (SqlConnection connection = GetConnection())
+            {
+                connection.Open();
+
+                // Tạo SQL command
+                string sqlCommand = "UPDATE Food SET FoodName = @FoodName, Ingredients = @Ingredients, CategoryID = @CategoryID, ImageString = @ImageString WHERE FoodID = @FoodID";
+                using (SqlCommand command = new SqlCommand(sqlCommand, connection))
+                {
+                    // Thêm các tham số
+                    command.Parameters.AddWithValue("@FoodID", foodId);
+                    command.Parameters.AddWithValue("@FoodName", name);
+                    command.Parameters.AddWithValue("@Ingredients", ingredient);
+                    command.Parameters.AddWithValue("@CategoryID", category);
+                    command.Parameters.AddWithValue("@ImageString", fileAddress);
+
+                    // Thực hiện lệnh SQL
+                    try
+                    {
+                        k = command.ExecuteNonQuery();
+                    }
+                    catch (Exception ex)
+                    {
+                        k = 0;
+                    }
+
+                }
+            }
+            return k;
+        }
+
+        static public int UpdateDish(string foodId, string size, float price)
+        {
+            int k = 0;
+
+            using (SqlConnection connection = GetConnection())
+            {
+                connection.Open();
+
+                // Tạo SQL command
+                string sqlCommand = "UPDATE Dish SET Price = @Price WHERE FoodID = @FoodID AND Size = @Size";
+                using (SqlCommand command = new SqlCommand(sqlCommand, connection))
+                {
+                    // Thêm các tham số
+                    command.Parameters.AddWithValue("@FoodID", foodId);
+                    command.Parameters.AddWithValue("@Size", size);
+                    command.Parameters.AddWithValue("@Price", price);
+                    // Thực hiện lệnh SQL
+                    try
+                    {
+                        k = command.ExecuteNonQuery();
+                    }
+                    catch (Exception ex)
+                    {
+                        k = 0;
+                    }
+                }
+            }
+            return k;
+        }
+
+
     }
 }

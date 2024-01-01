@@ -4,9 +4,6 @@
         <asp:HyperLink runat="server" NavigateUrl="~/Admin/OrderList.aspx">Orders</asp:HyperLink>
     </li>
     <li>
-        <asp:HyperLink runat="server" NavigateUrl="~/Admin/Contact.aspx">Contact</asp:HyperLink>
-    </li>
-    <li>
         <asp:HyperLink runat="server" NavigateUrl="~/Admin/NewFood.aspx">Manage Pizza</asp:HyperLink>
     </li><li>
         <asp:HyperLink runat="server" NavigateUrl="~/Admin/Logout.aspx">Log out</asp:HyperLink>
