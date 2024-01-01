@@ -8,8 +8,11 @@
         <asp:HyperLink runat="server" NavigateUrl="~/Admin/Contact.aspx">Contact</asp:HyperLink>
     </li>
     <li>
+        <asp:HyperLink runat="server" NavigateUrl="~/Admin/NewFood.aspx">Manage Pizza</asp:HyperLink>
+    </li><li>
         <asp:HyperLink runat="server" NavigateUrl="~/Admin/Logout.aspx">Log out</asp:HyperLink>
     </li>
+    
 </asp:Content>
 <asp:Content ContentPlaceHolderID="Body" runat="server">
     <h2><span class="label label-info">Order List</span></h2>

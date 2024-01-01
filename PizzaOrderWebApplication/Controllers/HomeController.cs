@@ -53,7 +53,7 @@ namespace PizzaOrderWebApplication.Controllers
         {
             //tao ket noi
             // string strConnection = ConfigurationManager.ConnectionStrings["PizzaDB"].ToString();
-            String strConnection = "Data Source=MANHDUNGIT\\SQLEXPRESS;Integrated Security= true;Initial Catalog=PizzaOrderWebApp";
+            String strConnection = "Data Source=TRUYEN;Integrated Security= true;Initial Catalog=PizzaOrderWebApp";
             SqlConnection conn = new SqlConnection(strConnection);
             //thuc hien truy van
             DataTable dataTable = new DataTable();
@@ -103,7 +103,7 @@ namespace PizzaOrderWebApplication.Controllers
             User user = new User(uname,nemail,pass,address,phone,birthday);
             //tao ket noi
             // string strConnection = ConfigurationManager.ConnectionStrings["PizzaDB"].ToString();
-            String strConnection = "Data Source=MANHDUNGIT\\SQLEXPRESS;Integrated Security= true;Initial Catalog=PizzaOrderWebApp";
+            String strConnection = "Data Source=TRUYEN;Integrated Security= true;Initial Catalog=PizzaOrderWebApp";
             SqlConnection conn = new SqlConnection(strConnection);
             //thuc hien truy van
             int k = 0;

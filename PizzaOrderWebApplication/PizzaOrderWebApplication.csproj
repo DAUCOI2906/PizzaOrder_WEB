@@ -164,6 +164,13 @@
     <Compile Include="Admin\Logout.aspx.designer.cs">
       <DependentUpon>Logout.aspx</DependentUpon>
     </Compile>
+    <Compile Include="Admin\NewFood.aspx.cs">
+      <DependentUpon>NewFood.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Admin\NewFood.aspx.designer.cs">
+      <DependentUpon>NewFood.aspx</DependentUpon>
+    </Compile>
     <Compile Include="Admin\OrderDetail.aspx.cs">
       <DependentUpon>OrderDetail.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -233,6 +240,7 @@
     <Content Include="Admin\Contact.aspx" />
     <Content Include="Admin\Login.aspx" />
     <Content Include="Admin\Logout.aspx" />
+    <Content Include="Admin\NewFood.aspx" />
     <Content Include="Admin\OrderDetail.aspx" />
     <Content Include="Admin\OrderList.aspx" />
     <Content Include="Content\bootstrap.css" />

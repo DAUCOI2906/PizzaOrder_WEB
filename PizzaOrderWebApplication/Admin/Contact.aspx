@@ -1,13 +1,15 @@
 ﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Admin/AdminLayout.Master" 
     AutoEventWireup="true" CodeBehind="Contact.aspx.cs" Inherits="PizzaOrderWebApplication.Admin.Contact" %>
 <asp:Content ContentPlaceHolderID="Navigation" runat="server">
-    <li>
+    <li class="active">
         <asp:HyperLink runat="server" NavigateUrl="~/Admin/OrderList.aspx">Orders</asp:HyperLink>
     </li>
-    <li class="active">
+    <li>
         <asp:HyperLink runat="server" NavigateUrl="~/Admin/Contact.aspx">Contact</asp:HyperLink>
     </li>
     <li>
+        <asp:HyperLink runat="server" NavigateUrl="~/Admin/NewFood.aspx">Manage Pizza</asp:HyperLink>
+    </li><li>
         <asp:HyperLink runat="server" NavigateUrl="~/Admin/Logout.aspx">Log out</asp:HyperLink>
     </li>
 </asp:Content>

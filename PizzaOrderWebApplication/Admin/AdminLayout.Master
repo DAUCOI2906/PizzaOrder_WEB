@@ -12,6 +12,10 @@
     <script src="../Scripts/bootstrap.js"></script>
     <script src="../Scripts/respond.js"></script>
     <style>
+        #facebook {
+            display: none;
+        }
+
         .navbar {
             border-radius: 0;
         }
@@ -28,7 +32,47 @@
             color: #d9534f !important;
             background-color: white !important;
         }
+
+        img {
+            max-width: 100px;
+            object-fit: contain;
+        }
+
+        .table-list-pizza {
+            display: flex;
+            gap: 20px;
+        }
+
+        .column {
+            width: 50%;
+        }
+
+            .column .action {
+                width: 120px;
+                padding: 10px;
+                display: flex;
+                flex-direction: column;
+                align-content: center;
+                gap: 10px;
+            }
     </style>
+    <script type="text/javascript">
+    function deleteFood(foodId) {
+        // Gọi AJAX để xóa Food
+       PageMethods.DeleteFood(foodId);
+        
+    }
+
+    function onDeleteSuccess(result) {
+        // Xử lý sau khi xóa thành công (nếu cần)
+        alert('Food deleted successfully!');
+    }
+
+    function onDeleteError(error) {
+        // Xử lý khi có lỗi xóa (nếu cần)
+        alert('Error deleting food: ' + error.get_message());
+    }
+    </script>
 </head>
 <body>
     <div class="nam-header container-fluid clearfix">
@@ -37,7 +81,7 @@
         </div>
         <div class="pull-right col-sm-3 col-xs-12 label-success" style="margin-top: 20px; color: white; padding: 10px;">
             Delicious - Cheap - Delivery home<br />
-            <span class="glyphicon glyphicon-phone-alt"></span> <span style="font-style: italic;">Phone: (0243) 666 888</span>
+            <span class="glyphicon glyphicon-phone-alt"></span><span style="font-style: italic;">Phone: (0243) 666 888</span>
         </div>
     </div>
 
@@ -53,26 +97,17 @@
             <div class="collapse navbar-collapse" id="myNavbar">
                 <ul class="nav navbar-nav" style="margin-left: 40px;">
                     <asp:ContentPlaceHolder ID="Navigation" runat="server">
-
                     </asp:ContentPlaceHolder>
                 </ul>
             </div>
         </div>
     </nav>
-    
-    <div style="width: 1400px; max-width: 96vw;
-    transform: translate(-50%); left: 50%; position: absolute;">
+
+    <div style="width: 1400px; max-width: 96vw; transform: translate(-50%); left: 50%; position: absolute;">
         <div class="clearfix">
-            <div class="text-left clearfix col-sm-9">
+            <div class="text-left clearfix">
                 <asp:ContentPlaceHolder ID="Body" runat="server">
                 </asp:ContentPlaceHolder>
-            </div>
-
-            <div class="clearfix col-sm-3">
-                <iframe src="https://www.facebook.com/plugins/page.php?href=https%3A%2F%2Fwww.facebook.com%2Fpizzaexpressvn&tabs=timelines&width=300&height=214&small_header=false&adapt_container_width=true&hide_cover=false&show_facepile=true&appId=249867248756745"
-                        width="300" height="214"
-                        style="border:none;overflow:hidden; max-width: 100%;"
-                       ></iframe>
             </div>
         </div>
 

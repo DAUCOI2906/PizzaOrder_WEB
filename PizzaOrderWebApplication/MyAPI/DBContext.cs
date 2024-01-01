@@ -11,7 +11,7 @@ namespace PizzaOrderWebApplication.MyAPI
 {
     public class DBContext
     {
-        
+
         public static SqlConnection GetConnection()
         {
             string strConnection = ConfigurationManager.ConnectionStrings["PizzaDB"].ToString();
@@ -50,14 +50,6 @@ namespace PizzaOrderWebApplication.MyAPI
                     Phone = dr["Phone"].ToString(),
                     Note = dr["Note"].ToString()
                 };
-                //int OrderId = Convert.ToInt32(dr["OrderID"]);
-                //DateTime OrderDate = Convert.ToDateTime(dr["OrderDate"]);
-                //DateTime ShippedDate = Convert.ToDateTime(dr["ShippedDate"]);
-                //string CustomerName = dr["CustomerName"].ToString();
-                //string CustomerAddress = dr["CustomerAddress"].ToString();
-                //string Phone = dr["Phone"].ToString();
-                //string Note = dr["Note"].ToString();
-                //Order o = new Order(OrderId, OrderDate, ShippedDate, CustomerName, CustomerAddress, Phone, Note);
                 list.Add(o);
             }
             return list;
@@ -74,7 +66,7 @@ namespace PizzaOrderWebApplication.MyAPI
                               ,[CustomerAddress]
                               ,[Phone]
                               ,[Note]
-                          FROM [dbo].[Orders] WHERE CustomerName='"+username+"'";
+                          FROM [dbo].[Orders] WHERE CustomerName='" + username + "'";
 
             SqlCommand command = new SqlCommand(query, connection);
             DataTable dt = new DataTable();
@@ -207,12 +199,143 @@ namespace PizzaOrderWebApplication.MyAPI
                 return true;
             return false;
         }
-        static public int add(String querry)
+        static public int InsertToDB(String querry)
         {
             int k = 0;
             SqlConnection connection = GetConnection();
             SqlCommand command = new SqlCommand(querry, connection);
             k = (int)command.ExecuteNonQuery();
+            return k;
+        }
+        static public int InsertFood(string foodId, string name, string ingredient, string fileAddress, int category)
+        {
+            int k = 0;
+
+            using (SqlConnection connection = GetConnection())
+            {
+                connection.Open();
+
+                // Tạo SQL command
+                string sqlCommand = "INSERT INTO Food (FoodID, FoodName, Ingredients, CategoryID, ImageString) VALUES (@FoodID, @FoodName, @Ingredients, @CategoryID, @ImageString)";
+                using (SqlCommand command = new SqlCommand(sqlCommand, connection))
+                {
+                    // Thêm các tham số
+                    command.Parameters.AddWithValue("@FoodID", foodId);
+                    command.Parameters.AddWithValue("@FoodName", name);
+                    command.Parameters.AddWithValue("@Ingredients", ingredient);
+                    command.Parameters.AddWithValue("@CategoryID", category);
+                    command.Parameters.AddWithValue("@ImageString", fileAddress);
+
+                    // Thực hiện lệnh SQL
+                    k = (int)command.ExecuteNonQuery();
+                }
+            }
+            return k;
+        }
+        static public int InsertDish(string foodId, string size, float price)
+        {
+            int k = 0;
+
+            using (SqlConnection connection = GetConnection())
+            {
+                connection.Open();
+
+                // Tạo SQL command
+                string sqlCommand = "INSERT INTO Dish (FoodID, Size, Price) VALUES (@FoodID, @Size, @Price)";
+                using (SqlCommand command = new SqlCommand(sqlCommand, connection))
+                {
+                    // Thêm các tham số
+                    command.Parameters.AddWithValue("@FoodID", foodId);
+                    command.Parameters.AddWithValue("@Size", size);
+                    command.Parameters.AddWithValue("@Price", price);
+
+                    // Thực hiện lệnh SQL
+                    k = (int)command.ExecuteNonQuery();
+                }
+            }
+            return k;
+
+        }
+
+        static public List<Food> GetAllPizza()
+        {
+            List<Food> list = new List<Food>();
+            SqlConnection connection = GetConnection();
+
+            string query = @"SELECT [FoodID]
+                              ,[FoodName]
+                              ,[Ingredients]
+                              ,[CategoryID]
+                              ,[ImageString]
+                          FROM [dbo].[Food]";
+
+            SqlCommand command = new SqlCommand(query, connection);
+            DataTable dt = new DataTable();
+            SqlDataAdapter adapter = new SqlDataAdapter(command);
+            adapter.Fill(dt);
+
+            foreach (DataRow dr in dt.Rows)
+            {
+                Food o = new Food
+                {
+                    FoodID = dr["FoodId"].ToString(),
+                    CategoryID = Convert.ToInt32(dr["CategoryID"]),
+                    FoodName = dr["FoodName"].ToString(),
+                    Ingredients = dr["Ingredients"].ToString(),
+                    ImageString = dr["ImageString"].ToString(),
+                };
+                list.Add(o);
+            }
+            return list;
+        }
+
+        public int DeleteFood(string foodID)
+        {
+            int k = 0;
+            using (SqlConnection connection = GetConnection())
+            {
+                connection.Open();
+
+                // Bước 1: Xóa chi tiết đặt hàng liên quan đến món ăn cụ thể
+                if (DeleteOrderDetails(connection, foodID) != 0
+                    && DeleteDishRecords(connection, foodID) != 0
+                    && DeleteFoodRecord(connection, foodID) != 0
+                    )
+                    k = 1;
+            }
+            return k;
+        }
+
+        private int DeleteOrderDetails(SqlConnection connection, string foodID)
+        {
+            int k = 0;
+            using (SqlCommand command = new SqlCommand("DELETE FROM OrderDetail WHERE FoodID = @FoodID", connection))
+            {
+                command.Parameters.AddWithValue("@FoodID", foodID);
+                k = (int)command.ExecuteNonQuery();
+            }
+            return k;
+        }
+
+        private int DeleteDishRecords(SqlConnection connection, string foodID)
+        {
+            int k = 0;
+            using (SqlCommand command = new SqlCommand("DELETE FROM Dish WHERE FoodID = @FoodID", connection))
+            {
+                command.Parameters.AddWithValue("@FoodID", foodID);
+                k = (int)command.ExecuteNonQuery();
+            }
+            return k;
+        }
+
+        private int DeleteFoodRecord(SqlConnection connection, string foodID)
+        {
+            int k = 0;
+            using (SqlCommand command = new SqlCommand("DELETE FROM Food WHERE FoodID = @FoodID", connection))
+            {
+                command.Parameters.AddWithValue("@FoodID", foodID);
+                k = (int)command.ExecuteNonQuery();
+            }
             return k;
         }
     }
